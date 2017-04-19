@@ -63,6 +63,15 @@
 
         <li>
 
+            <a class="apidocElementLiA" href="#apidoc.element.node-webkit-builder.node-webkit-builder">
+            function <span class="apidocSignatureSpan"></span>node-webkit-builder
+            <span class="apidocSignatureSpan">(options)</span>
+            </a>
+
+        </li>
+
+        <li>
+
             <a class="apidocElementLiA" href="#apidoc.element.node-webkit-builder.super_">
             function <span class="apidocSignatureSpan">node-webkit-builder.</span>super_
             <span class="apidocSignatureSpan">()</span>
@@ -268,6 +277,79 @@
 
 <div class="apidocSectionDiv">
 <h1><a href="#apidoc.module.node-webkit-builder" id="apidoc.module.node-webkit-builder">module node-webkit-builder</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.node-webkit-builder.node-webkit-builder" id="apidoc.element.node-webkit-builder.node-webkit-builder">
+        function <span class="apidocSignatureSpan"></span>node-webkit-builder
+        <span class="apidocSignatureSpan">(options)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function NwBuilder(options) {
+    var self = this;
+    var defaults = {
+        files: null,
+        appName: false,
+        appVersion: false,
+        platforms: [&#x27;osx32&#x27;, &#x27;osx64&#x27;, &#x27;win32&#x27;, &#x27;win64&#x27;],
+        currentPlatform: detectCurrentPlatform(),
+        version: &#x27;latest&#x27;,
+        buildDir: &#x27;./build&#x27;,
+        cacheDir: &#x27;./cache&#x27;,
+        downloadUrl: &#x27;http://dl.nwjs.io/&#x27;,
+        buildType: &#x27;default&#x27;,
+        forceDownload: false,
+        macCredits: false,
+        macIcns: false,
+        macZip: false,
+        macPlist: false,
+        winIco: null,
+        argv: process.argv.slice(2)
+    };
+    // Intercept the platforms and check for the legacy platforms of &#x27;osx&#x27; and &#x27;win&#x27; and
+    // replace with &#x27;osx32&#x27;, &#x27;osx64&#x27;, and &#x27;win32&#x27;, &#x27;win64&#x27; respectively.
+    if(typeof options.platforms != &#x27;undefined&#x27;){
+        if(options.platforms.indexOf(&#x27;osx&#x27;) &#x3e;= 0){
+            options.platforms.splice(options.platforms.indexOf(&#x27;osx&#x27;), 1, &#x27;osx32&#x27;, &#x27;osx64&#x27;);
+        }
+        if(options.platforms.indexOf(&#x27;win&#x27;) &#x3e;= 0){
+            options.platforms.splice(options.platforms.indexOf(&#x27;win&#x27;), 1, &#x27;win32&#x27;, &#x27;win64&#x27;);
+        }
+        if(options.platforms.indexOf(&#x27;linux&#x27;) &#x3e;= 0){
+            options.platforms.splice(options.platforms.indexOf(&#x27;linux&#x27;), 1, &#x27;linux32&#x27;, &#x27;linux64&#x27;);
+        }
+    }
+    // Assing options
+    this.options = _.defaults(options, defaults);
+    this._platforms = platforms;
+
+    // Some Option checking
+    if(!this.options.files) {
+        throw new Error(&#x27;Please specify some files&#x27;);
+    }
+
+    if (this.options.platforms.length === 0)
+        throw new Error(&#x27;No platform to build!&#x27;);
+
+    // verify all the platforms specifed by the user are supported
+    // this + previous check assures as we have only buildable platforms specified
+    this.options.platforms.forEach(function(platform) {
+        if (!(platform in platforms))
+            throw new Error(&#x27;unknown platform &#x27; + platform)
+    })
+
+    this._platforms = _.cloneDeep(platforms)
+
+    // clear all unused platforms
+    for (var name in this._platforms) {
+        if (this.options.platforms.indexOf(name) === -1)
+            delete this._platforms[name]
+    }
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
 
 
     <h2>

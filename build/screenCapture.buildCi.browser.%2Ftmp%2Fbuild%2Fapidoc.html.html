@@ -56,6 +56,15 @@
 
         <li>
 
+            <a class="apidocElementLiA" href="#apidoc.element.node-webkit-builder.node-webkit-builder">
+            function <span class="apidocSignatureSpan"></span>node-webkit-builder
+            <span class="apidocSignatureSpan">(options)</span>
+            </a>
+
+        </li>
+
+        <li>
+
             <a class="apidocElementLiA" href="#apidoc.element.node-webkit-builder.super_">
             function <span class="apidocSignatureSpan">node-webkit-builder.</span>super_
             <span class="apidocSignatureSpan">()</span>
@@ -261,6 +270,79 @@
 
 <div class="apidocSectionDiv">
 <h1><a href="#apidoc.module.node-webkit-builder" id="apidoc.module.node-webkit-builder">module node-webkit-builder</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.node-webkit-builder.node-webkit-builder" id="apidoc.element.node-webkit-builder.node-webkit-builder">
+        function <span class="apidocSignatureSpan"></span>node-webkit-builder
+        <span class="apidocSignatureSpan">(options)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function NwBuilder(options) {
+    var self = this;
+    var defaults = {
+        files: null,
+        appName: false,
+        appVersion: false,
+        platforms: ['osx32', 'osx64', 'win32', 'win64'],
+        currentPlatform: detectCurrentPlatform(),
+        version: 'latest',
+        buildDir: './build',
+        cacheDir: './cache',
+        downloadUrl: 'http://dl.nwjs.io/',
+        buildType: 'default',
+        forceDownload: false,
+        macCredits: false,
+        macIcns: false,
+        macZip: false,
+        macPlist: false,
+        winIco: null,
+        argv: process.argv.slice(2)
+    };
+    // Intercept the platforms and check for the legacy platforms of 'osx' and 'win' and
+    // replace with 'osx32', 'osx64', and 'win32', 'win64' respectively.
+    if(typeof options.platforms != 'undefined'){
+        if(options.platforms.indexOf('osx') &gt;= 0){
+            options.platforms.splice(options.platforms.indexOf('osx'), 1, 'osx32', 'osx64');
+        }
+        if(options.platforms.indexOf('win') &gt;= 0){
+            options.platforms.splice(options.platforms.indexOf('win'), 1, 'win32', 'win64');
+        }
+        if(options.platforms.indexOf('linux') &gt;= 0){
+            options.platforms.splice(options.platforms.indexOf('linux'), 1, 'linux32', 'linux64');
+        }
+    }
+    // Assing options
+    this.options = _.defaults(options, defaults);
+    this._platforms = platforms;
+
+    // Some Option checking
+    if(!this.options.files) {
+        throw new Error('Please specify some files');
+    }
+
+    if (this.options.platforms.length === 0)
+        throw new Error('No platform to build!');
+
+    // verify all the platforms specifed by the user are supported
+    // this + previous check assures as we have only buildable platforms specified
+    this.options.platforms.forEach(function(platform) {
+        if (!(platform in platforms))
+            throw new Error('unknown platform ' + platform)
+    })
+
+    this._platforms = _.cloneDeep(platforms)
+
+    // clear all unused platforms
+    for (var name in this._platforms) {
+        if (this.options.platforms.indexOf(name) === -1)
+            delete this._platforms[name]
+    }
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
 
 
     <h2>
